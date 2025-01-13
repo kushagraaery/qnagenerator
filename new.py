@@ -13,6 +13,8 @@ from email.mime.text import MIMEText
 import threading
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
+import time
+from threading import Lock
 
 # Load environment variables
 load_dotenv()
@@ -589,22 +591,42 @@ for msg in st.session_state["messages"]:
     elif msg["role"] == "assistant":
         st.chat_message("assistant").write(msg["content"])
 
-# This function will run the job without the lock
+# Lock to prevent multiple executions
+job_lock = Lock()
+
+# This function will run the job and avoid multiple executions using the lock
 def scheduled_job():
-    print("Weekly data fetch initiated...")
-    fetch_all_societies_data()  # Call your data fetch function
-    print("Weekly data fetch completed!")
-    update_dashboard()
-    print("Dashboard Updated!")
+    # Check if the lock is already acquired
+    if job_lock.locked():
+        print("Job is already running, skipping this run.")
+        return
+
+    # Acquire the lock before running the job
+    with job_lock:
+        print("Weekly data fetch initiated...")
+        fetch_all_societies_data()  # Call your data fetch function
+        print("Weekly data fetch completed!")
+        update_dashboard()
+        print("Dashboard is updated!")
 
 # Function to start the scheduler
 def start_scheduler():
     # Create the scheduler and add the job
     scheduler = BackgroundScheduler()
-    scheduler.add_job(scheduled_job, 'cron', day_of_week='mon', hour=10, minute=00, timezone="Asia/Kolkata")
+    scheduler.add_job(scheduled_job, 'cron', day_of_week='mon', hour=12, minute=55, timezone="Asia/Kolkata")
+    
     # Start the scheduler
     scheduler.start()
 
+    # This loop ensures the scheduler runs even in Streamlit
+    while True:
+        time.sleep(10)  # Keep the thread alive to run the scheduler
+
 # Start the scheduler in a separate thread
 if __name__ == "__main__":
-    threading.Thread(target=start_scheduler, daemon=True).start()
+    # If the script is running in Streamlit
+    if not hasattr(st, 'started'):
+        st.started = True
+        threading.Thread(target=start_scheduler, daemon=True).start()
+
+st.write("updated")
