@@ -623,7 +623,7 @@ def start_scheduler():
         'cron',
         day_of_week='mon',
         hour=12,
-        minute=20,
+        minute=30,
         timezone="Asia/Kolkata",
     )
     scheduler.start()
