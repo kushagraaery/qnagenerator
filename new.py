@@ -13,7 +13,6 @@ from email.mime.text import MIMEText
 import threading
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
-import datetime
 
 # Load environment variables
 load_dotenv()
@@ -590,54 +589,22 @@ for msg in st.session_state["messages"]:
     elif msg["role"] == "assistant":
         st.chat_message("assistant").write(msg["content"])
 
-# Create a global lock
-job_lock = threading.Lock()
-
-# Function to simulate data fetch
-def fetch_all_societies_data():
-    print(f"Data fetched at {datetime.now()}")
-
-# Function to update the dashboard
-def update_dashboard():
-    print(f"Dashboard updated at {datetime.now()}")
-
-# Scheduled job function
+# This function will run the job without the lock
 def scheduled_job():
-    if job_lock.acquire(blocking=False):  # Attempt to acquire the lock
-        try:
-            print("Weekly data fetch initiated...")
-            fetch_all_societies_data()  # Call your data fetch function
-            print("Weekly data fetch completed!")
-            update_dashboard()
-            print("Dashboard Updated!")
-        finally:
-            job_lock.release()  # Release the lock
-    else:
-        print(f"Job already running at {datetime.now()}")
+    print("Weekly data fetch initiated...")
+    fetch_all_societies_data()  # Call your data fetch function
+    print("Weekly data fetch completed!")
+    update_dashboard()
+    print("Dashboard Updated!")
 
 # Function to start the scheduler
 def start_scheduler():
+    # Create the scheduler and add the job
     scheduler = BackgroundScheduler()
-    scheduler.add_job(
-        scheduled_job,
-        'cron',
-        day_of_week='mon',
-        hour=12,
-        minute=30,
-        timezone="Asia/Kolkata",
-    )
+    scheduler.add_job(scheduled_job, 'cron', day_of_week='mon', hour=10, minute=00, timezone="Asia/Kolkata")
+    # Start the scheduler
     scheduler.start()
-    print("Scheduler started...")
 
 # Start the scheduler in a separate thread
-if 'scheduler_started' not in st.session_state:
-    st.session_state.scheduler_started = False
-
-if not st.session_state.scheduler_started:
+if __name__ == "__main__":
     threading.Thread(target=start_scheduler, daemon=True).start()
-    st.session_state.scheduler_started = True
-
-# Keep the Streamlit app running
-st.title("Weekly Scheduler App")
-st.write("The scheduler is running in the background with a lock mechanism.")
-st.write("It will fetch data and update the dashboard every Monday at 10 AM (IST).")
