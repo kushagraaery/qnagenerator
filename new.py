@@ -601,12 +601,10 @@ def scheduled_job():
 def start_scheduler():
     # Create the scheduler and add the job
     scheduler = BackgroundScheduler()
-    scheduler.add_job(scheduled_job, 'cron', day_of_week='tue', hour=12, minute=36, timezone="Asia/Kolkata")
+    scheduler.add_job(scheduled_job, 'cron', day_of_week='mon', hour=10, minute=00, timezone="Asia/Kolkata")
     # Start the scheduler
     scheduler.start()
 
 # Start the scheduler in a separate thread
 if __name__ == "__main__":
     threading.Thread(target=start_scheduler, daemon=True).start()
-
-st.write("updated")
