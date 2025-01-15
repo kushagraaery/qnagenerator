@@ -601,10 +601,44 @@ def scheduled_job():
 def start_scheduler():
     # Create the scheduler and add the job
     scheduler = BackgroundScheduler()
-    scheduler.add_job(scheduled_job, 'cron', day_of_week='mon', hour=10, minute=00, timezone="Asia/Kolkata")
+    scheduler.add_job(scheduled_job, 'cron', day_of_week='wed', hour=12, minute=5, timezone="Asia/Kolkata")
     # Start the scheduler
     scheduler.start()
 
 # Start the scheduler in a separate thread
 if __name__ == "__main__":
     threading.Thread(target=start_scheduler, daemon=True).start()
+
+st.write("updated code")
+
+# # Button to fetch the existing Excel file
+# if st.button("View Data"):
+#     df, sha = fetch_excel_from_github()
+#     if df is not None:
+#         aliased_df = alias_columns(df)
+#         st.success("Data fetched successfully!")
+#         st.write("Current data with aliased columns (with text wrapping):")
+
+#         # Convert dataframe to HTML with inline CSS for text wrapping
+#         wrapped_html = aliased_df.to_html(index=False, escape=False).replace(
+#             '<table border="1" class="dataframe">',
+#             '<table style="width:100%; border-collapse: collapse; word-wrap: break-word; table-layout: fixed;">'
+#         ).replace(
+#             '<td>',
+#             '<td style="white-space: pre-wrap; word-wrap: break-word; border: 1px solid #ddd; padding: 8px;">'
+#         ).replace(
+#             '<th>',
+#             '<th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">'
+#         )
+
+#         # Display styled table
+#         st.markdown(wrapped_html, unsafe_allow_html=True)
+
+#         # Add download button for the Excel file
+#         excel_data = convert_df_to_excel(aliased_df)
+#         st.download_button(
+#             label="Download as Excel",
+#             data=excel_data,
+#             file_name="data.xlsx",
+#             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+#         )
