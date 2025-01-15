@@ -601,7 +601,7 @@ def scheduled_job():
 def start_scheduler():
     # Create the scheduler and add the job
     scheduler = BackgroundScheduler()
-    scheduler.add_job(scheduled_job, 'cron', day_of_week='wed', hour=12, minute=5, timezone="Asia/Kolkata")
+    scheduler.add_job(scheduled_job, 'cron', day_of_week='wed', hour=12, minute=7, timezone="Asia/Kolkata")
     # Start the scheduler
     scheduler.start()
 
