@@ -128,19 +128,34 @@ def alias_columns(df):
     }
     return df.rename(columns=column_aliases)
 
-# Fetch and display data for the selected society
+# Function to fetch and display data for the selected society
 def display_selected_society(selected):
-    if selected:
-
+    if selected:  # Ensure a valid society is selected
         # Check if the selected society is already in the GitHub file
         if existing_data is not None and not existing_data.empty:
+            # Filter data for the selected society
             society_data = existing_data[existing_data["Society Name"] == selected]
+            
             if not society_data.empty:
-                st.session_state.report_data = pd.concat([st.session_state.report_data, society_data], ignore_index=True)
-                aliased_data = alias_columns(society_data)  # Apply column aliasing here
+                # Check if the society data is already in the report
+                if "report_data" not in st.session_state:
+                    st.session_state.report_data = pd.DataFrame()  # Initialize report_data if not already done
+                
+                # Filter out duplicates before appending
+                is_duplicate = st.session_state.report_data["Society Name"].isin(society_data["Society Name"]).any()
+                if not is_duplicate:
+                    st.session_state.report_data = pd.concat([st.session_state.report_data, society_data], ignore_index=True)
+                    st.success(f"Data for {selected} appended to the report.")
+                else:
+                    st.info(f"Data for {selected} is already in the report.")
+                
+                # Apply column aliasing and display the report
+                aliased_data = alias_columns(st.session_state.report_data)  # Apply column aliasing
                 st.dataframe(aliased_data)
             else:
                 st.warning(f"No existing data found for {selected}.")
+        else:
+            st.error("No existing data available to fetch from.")
 
 # Trigger the display of the selected society
 display_selected_society(selected_society)
@@ -304,7 +319,7 @@ sender_email = "johnwickcrayons@gmail.com"
 sender_password = "afpt eoyt asaq qzjh"
 
 # Send email if button clicked
-def update_dashboard():
+if st.button("Send data to Google Sheets"):
     if receiver_email and email_subject and sender_email and sender_password:
         df, sha = fetch_excel_from_github()
         html_table = dataframe_to_html(df)
@@ -344,9 +359,9 @@ def update_dashboard():
         status = send_email(smtp_server, smtp_port, sender_email, sender_password, receiver_email, email_subject, email_body)
         # Display success or error message
         if "successfully" in status:
-            st.success("Successfully Updated Dashboard!")
+            st.success("Successfully sent data to Google Sheets!")
         else:
-            st.error("Error while Updating Dashboard!")
+            st.error("Error while sending data to Google Sheets!")
 
 # Chatbot 2.0 Section with Enhanced Styling and Animations
 st.markdown('<div class="main-header">🤖 Chatbot 2.0 - Fine-Tuned on Report Data</div>', unsafe_allow_html=True)
@@ -594,51 +609,15 @@ def scheduled_job():
     print("Weekly data fetch initiated...")
     fetch_all_societies_data()  # Call your data fetch function
     print("Weekly data fetch completed!")
-    update_dashboard()
-    print("Dashboard Updated!")
 
 # Function to start the scheduler
 def start_scheduler():
     # Create the scheduler and add the job
     scheduler = BackgroundScheduler()
-    scheduler.add_job(scheduled_job, 'cron', day_of_week='wed', hour=12, minute=21, timezone="Asia/Kolkata")
+    scheduler.add_job(scheduled_job, 'cron', day_of_week='mon', hour=10, minute=00, timezone="Asia/Kolkata")
     # Start the scheduler
     scheduler.start()
 
 # Start the scheduler in a separate thread
 if __name__ == "__main__":
     threading.Thread(target=start_scheduler, daemon=True).start()
-
-st.write("updated code")
-
-# # Button to fetch the existing Excel file
-# if st.button("View Data"):
-#     df, sha = fetch_excel_from_github()
-#     if df is not None:
-#         aliased_df = alias_columns(df)
-#         st.success("Data fetched successfully!")
-#         st.write("Current data with aliased columns (with text wrapping):")
-
-#         # Convert dataframe to HTML with inline CSS for text wrapping
-#         wrapped_html = aliased_df.to_html(index=False, escape=False).replace(
-#             '<table border="1" class="dataframe">',
-#             '<table style="width:100%; border-collapse: collapse; word-wrap: break-word; table-layout: fixed;">'
-#         ).replace(
-#             '<td>',
-#             '<td style="white-space: pre-wrap; word-wrap: break-word; border: 1px solid #ddd; padding: 8px;">'
-#         ).replace(
-#             '<th>',
-#             '<th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">'
-#         )
-
-#         # Display styled table
-#         st.markdown(wrapped_html, unsafe_allow_html=True)
-
-#         # Add download button for the Excel file
-#         excel_data = convert_df_to_excel(aliased_df)
-#         st.download_button(
-#             label="Download as Excel",
-#             data=excel_data,
-#             file_name="data.xlsx",
-#             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-#         )
