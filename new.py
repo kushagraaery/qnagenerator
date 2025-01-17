@@ -309,12 +309,37 @@ def create_chart(df):
     else:
         st.warning("No data available for chart creation.")
 
+# Function to create and display a pie chart
+def create_pie_chart(df):
+    if df is not None and not df.empty:
+        try:
+            # Ensure data is numeric where applicable
+            df["Membership Count"] = pd.to_numeric(df["Membership Count"], errors="coerce")
+            df = df.dropna(subset=["Membership Count"])  # Drop rows with invalid membership counts
+
+            # Create a pie chart using Plotly
+            fig = px.pie(
+                df,
+                names="Region",
+                values="Membership Count",
+                title="Membership Count Distribution by Society",
+                hover_data=["Society Name"],
+                labels={"Membership Count": "Count", "Region": "Region"}
+            )
+            fig.update_traces(textinfo="percent+label")  # Show percentage and label
+            st.plotly_chart(fig)
+        except Exception as e:
+            st.error(f"Error while creating the pie chart: {e}")
+    else:
+        st.warning("No data available for pie chart creation.")
+
 if st.button("View Dashboard"):
     df, sha = fetch_excel_from_github()
     if df is not None:
         aliased_df = alias_columns(df)
         st.success("Dashboard updated successfully!")
         create_chart(aliased_df)
+        create_pie_chart(aliased_df)
 
 def send_email(smtp_server, smtp_port, sender_email, sender_password, receiver_email, subject, html_content):
     # Create the email message
