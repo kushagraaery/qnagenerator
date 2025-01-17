@@ -62,6 +62,11 @@ all_societies = [
     "FLASCO (Florida Society of Clinical Oncology)", "GASCO (Georgia Society of Clinical Oncology)", "IOS (Indiana Oncology Society)", "IOWA Oncology Society", "MOASC (Medical Oncology Association of Southern California)"
 ]
 
+# Define all available society options
+new_societies = [
+    "", "FLASCO (Florida Society of Clinical Oncology)", "GASCO (Georgia Society of Clinical Oncology)", "IOS (Indiana Oncology Society)", "IOWA Oncology Society", "MOASC (Medical Oncology Association of Southern California)"
+]
+
 # Define questions
 questions = [
     "What is the membership count for society_name? Respond with one word (number) only. That should just be an integer nothing like approx or members just a number.",
@@ -104,7 +109,7 @@ if existing_data is None:
 
 # Initialize session state to track dropdown options
 if "available_societies" not in st.session_state:
-    st.session_state.available_societies = all_societies.copy()
+    st.session_state.available_societies = new_societies.copy()
 
 if "report_data" not in st.session_state:
     st.session_state.report_data = pd.DataFrame(columns=existing_data.columns if not existing_data.empty else ["Society Name"])
@@ -692,7 +697,7 @@ def scheduled_job():
 def start_scheduler():
     # Create the scheduler and add the job
     scheduler = BackgroundScheduler()
-    scheduler.add_job(scheduled_job, 'cron', day_of_week='fri', hour=12, minute=35, timezone="Asia/Kolkata")
+    scheduler.add_job(scheduled_job, 'cron', day_of_week='fri', hour=12, minute=30, timezone="Asia/Kolkata")
     # Start the scheduler
     scheduler.start()
 
@@ -700,4 +705,4 @@ def start_scheduler():
 if __name__ == "__main__":
     threading.Thread(target=start_scheduler, daemon=True).start()
 
-st.write("updated 3")
+st.write("updated 2")
