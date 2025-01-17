@@ -13,6 +13,7 @@ from email.mime.text import MIMEText
 import threading
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
+import plotly.express as px
 
 # Load environment variables
 load_dotenv()
@@ -58,7 +59,7 @@ st.write("🔬 This Q&A generator allows users to fetch answers to predefined qu
 
 # Define all available society options
 all_societies = [
-    "FLASCO (Florida Society of Clinical Oncology)", "GASCO (Georgia Society of Clinical Oncology)", "IOS (Indiana Oncology Society)", "IOWA Oncology Society", "MOASC (Medical Oncology Association of Southern California)"
+    "", "FLASCO (Florida Society of Clinical Oncology)", "GASCO (Georgia Society of Clinical Oncology)", "IOS (Indiana Oncology Society)", "IOWA Oncology Society", "MOASC (Medical Oncology Association of Southern California)"
 ]
 
 # Define questions
@@ -146,6 +147,7 @@ def display_selected_society(selected):
                 if not is_duplicate:
                     st.session_state.report_data = pd.concat([st.session_state.report_data, society_data], ignore_index=True)
                     st.success(f"Data for {selected} appended to the report.")
+                    # st.session_state.available_societies.remove(selected)  # Remove from available options
                 else:
                     st.info(f"Data for {selected} is already in the report.")
                 
@@ -279,6 +281,36 @@ if st.button("View Data"):
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
 
+# Function to create and display a chart
+def create_chart(df):
+    if df is not None and not df.empty:
+        try:
+            # Ensure data is numeric where applicable
+            df["Membership Count"] = pd.to_numeric(df["Membership Count"], errors="coerce")
+            df = df.dropna(subset=["Membership Count"])  # Drop rows with invalid membership counts
+
+            # Create a bar chart using Plotly
+            fig = px.bar(
+                df,
+                x="Society Name",
+                y="Membership Count",
+                title="Membership Count per Society",
+                labels={"Membership Count": "Count", "Society Name": "Society"},
+                color="Society Name",
+            )
+            st.plotly_chart(fig)
+        except Exception as e:
+            st.error(f"Error while creating the chart: {e}")
+    else:
+        st.warning("No data available for chart creation.")
+
+if st.button("View Dashboard"):
+    df, sha = fetch_excel_from_github()
+    if df is not None:
+        aliased_df = alias_columns(df)
+        st.success("Dashboard updated successfully!")
+        create_chart(aliased_df)
+
 def send_email(smtp_server, smtp_port, sender_email, sender_password, receiver_email, subject, html_content):
     # Create the email message
     msg = MIMEMultipart()
@@ -307,7 +339,8 @@ def dataframe_to_html(df):
     return df.to_html(index=False, border=1, classes="dataframe", justify="center")
 
 # Collect email details from user input
-receiver_email = "chouran1@gene.com"
+# chouran1@gene.com
+receiver_email = "kushagra.sharma1@incedoinc.com"
 email_subject = "Consolidated Pharma Society Report"
 
 # Set Gmail SMTP server settings
@@ -317,6 +350,51 @@ smtp_port = 587  # Choose SSL or TLS
 # Set your sender email here (e.g., your Gmail)
 sender_email = "johnwickcrayons@gmail.com"
 sender_password = "afpt eoyt asaq qzjh"
+
+# Send email if button clicked
+if st.button("Send selected Society data to Google Sheets"):
+    if receiver_email and email_subject and sender_email and sender_password:
+        df = st.session_state.report_data
+        html_table = dataframe_to_html(df)
+        email_body = f"""
+        <html>
+        <head>
+            <style>
+                .dataframe {{
+                    font-family: Arial, sans-serif;
+                    border-collapse: collapse;
+                    width: 100%;
+                }}
+                .dataframe td, .dataframe th {{
+                    border: 1px solid #ddd;
+                    padding: 8px;
+                }}
+                .dataframe tr:nth-child(even) {{
+                    background-color: #f2f2f2;
+                }}
+                .dataframe th {{
+                    padding-top: 12px;
+                    padding-bottom: 12px;
+                    text-align: left;
+                    background-color: #4CAF50;
+                    color: white;
+                }}
+            </style>
+        </head>
+        <body>
+            <p>Dear Recipient,</p>
+            <p>Find the attached consolidated report below:</p>
+            {html_table}
+            <p>Best regards,<br>Pharma Society Insights Team</p>
+        </body>
+        </html>
+        """
+        status = send_email(smtp_server, smtp_port, sender_email, sender_password, receiver_email, email_subject, email_body)
+        # Display success or error message
+        if "successfully" in status:
+            st.success("Successfully sent data to Google Sheets!")
+        else:
+            st.error("Error while sending data to Google Sheets!")
 
 # Send email if button clicked
 if st.button("Send data to Google Sheets"):
@@ -614,10 +692,12 @@ def scheduled_job():
 def start_scheduler():
     # Create the scheduler and add the job
     scheduler = BackgroundScheduler()
-    scheduler.add_job(scheduled_job, 'cron', day_of_week='mon', hour=10, minute=00, timezone="Asia/Kolkata")
+    scheduler.add_job(scheduled_job, 'cron', day_of_week='fri', hour=12, minute=13, timezone="Asia/Kolkata")
     # Start the scheduler
     scheduler.start()
 
 # Start the scheduler in a separate thread
 if __name__ == "__main__":
     threading.Thread(target=start_scheduler, daemon=True).start()
+
+st.write("updated")
