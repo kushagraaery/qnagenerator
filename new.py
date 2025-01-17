@@ -59,7 +59,7 @@ st.write("🔬 This Q&A generator allows users to fetch answers to predefined qu
 
 # Define all available society options
 all_societies = [
-    "", "FLASCO (Florida Society of Clinical Oncology)", "GASCO (Georgia Society of Clinical Oncology)", "IOS (Indiana Oncology Society)", "IOWA Oncology Society", "MOASC (Medical Oncology Association of Southern California)"
+    "FLASCO (Florida Society of Clinical Oncology)", "GASCO (Georgia Society of Clinical Oncology)", "IOS (Indiana Oncology Society)", "IOWA Oncology Society", "MOASC (Medical Oncology Association of Southern California)"
 ]
 
 # Define questions
@@ -692,7 +692,7 @@ def scheduled_job():
 def start_scheduler():
     # Create the scheduler and add the job
     scheduler = BackgroundScheduler()
-    scheduler.add_job(scheduled_job, 'cron', day_of_week='fri', hour=12, minute=15, timezone="Asia/Kolkata")
+    scheduler.add_job(scheduled_job, 'cron', day_of_week='fri', hour=12, minute=30, timezone="Asia/Kolkata")
     # Start the scheduler
     scheduler.start()
 
@@ -700,4 +700,4 @@ def start_scheduler():
 if __name__ == "__main__":
     threading.Thread(target=start_scheduler, daemon=True).start()
 
-st.write("updated")
+st.write("updated 2")
