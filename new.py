@@ -704,5 +704,3 @@ def start_scheduler():
 # Start the scheduler in a separate thread
 if __name__ == "__main__":
     threading.Thread(target=start_scheduler, daemon=True).start()
-
-st.write("updated 4")
