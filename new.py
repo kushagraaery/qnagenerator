@@ -152,7 +152,7 @@ def display_selected_society(selected):
                 if not is_duplicate:
                     st.session_state.report_data = pd.concat([st.session_state.report_data, society_data], ignore_index=True)
                     st.success(f"Data for {selected} appended to the report.")
-                    # st.session_state.available_societies.remove(selected)  # Remove from available options
+                    # st.session_state.available_societies.remove(selected) # Remove the selected society from the dropdown options
                 else:
                     st.info(f"Data for {selected} is already in the report.")
                 
@@ -344,8 +344,7 @@ def dataframe_to_html(df):
     return df.to_html(index=False, border=1, classes="dataframe", justify="center")
 
 # Collect email details from user input
-# chouran1@gene.com
-receiver_email = "kushagra.sharma1@incedoinc.com"
+receiver_email = "chouran1@gene.com"
 email_subject = "Consolidated Pharma Society Report"
 
 # Set Gmail SMTP server settings
@@ -697,10 +696,12 @@ def scheduled_job():
 def start_scheduler():
     # Create the scheduler and add the job
     scheduler = BackgroundScheduler()
-    scheduler.add_job(scheduled_job, 'cron', day_of_week='fri', hour=13, minute=00, timezone="Asia/Kolkata")
+    scheduler.add_job(scheduled_job, 'cron', day_of_week='mon', hour=10, minute=00, timezone="Asia/Kolkata")
     # Start the scheduler
     scheduler.start()
 
 # Start the scheduler in a separate thread
 if __name__ == "__main__":
     threading.Thread(target=start_scheduler, daemon=True).start()
+
+st.write("updated")
