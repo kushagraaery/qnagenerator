@@ -322,7 +322,7 @@ def create_pie_chart(df):
                 df,
                 names="Region",
                 values="Membership Count",
-                title="Membership Count Distribution by Society",
+                title="Membership Count Distribution by Region",
                 hover_data=["Society Name"],
                 labels={"Membership Count": "Count", "Region": "Region"}
             )
