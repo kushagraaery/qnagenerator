@@ -425,50 +425,50 @@ if st.button("Send selected Society data to Google Sheets"):
         else:
             st.error("Error while sending data to Google Sheets!")
 
-# Send email if button clicked
-if st.button("Send data to Google Sheets"):
-    if receiver_email and email_subject and sender_email and sender_password:
-        df, sha = fetch_excel_from_github()
-        html_table = dataframe_to_html(df)
-        email_body = f"""
-        <html>
-        <head>
-            <style>
-                .dataframe {{
-                    font-family: Arial, sans-serif;
-                    border-collapse: collapse;
-                    width: 100%;
-                }}
-                .dataframe td, .dataframe th {{
-                    border: 1px solid #ddd;
-                    padding: 8px;
-                }}
-                .dataframe tr:nth-child(even) {{
-                    background-color: #f2f2f2;
-                }}
-                .dataframe th {{
-                    padding-top: 12px;
-                    padding-bottom: 12px;
-                    text-align: left;
-                    background-color: #4CAF50;
-                    color: white;
-                }}
-            </style>
-        </head>
-        <body>
-            <p>Dear Recipient,</p>
-            <p>Find the attached consolidated report below:</p>
-            {html_table}
-            <p>Best regards,<br>Pharma Society Insights Team</p>
-        </body>
-        </html>
-        """
-        status = send_email(smtp_server, smtp_port, sender_email, sender_password, receiver_email, email_subject, email_body)
-        # Display success or error message
-        if "successfully" in status:
-            st.success("Successfully sent data to Google Sheets!")
-        else:
-            st.error("Error while sending data to Google Sheets!")
+# # Send email if button clicked
+# if st.button("Send data to Google Sheets"):
+#     if receiver_email and email_subject and sender_email and sender_password:
+#         df, sha = fetch_excel_from_github()
+#         html_table = dataframe_to_html(df)
+#         email_body = f"""
+#         <html>
+#         <head>
+#             <style>
+#                 .dataframe {{
+#                     font-family: Arial, sans-serif;
+#                     border-collapse: collapse;
+#                     width: 100%;
+#                 }}
+#                 .dataframe td, .dataframe th {{
+#                     border: 1px solid #ddd;
+#                     padding: 8px;
+#                 }}
+#                 .dataframe tr:nth-child(even) {{
+#                     background-color: #f2f2f2;
+#                 }}
+#                 .dataframe th {{
+#                     padding-top: 12px;
+#                     padding-bottom: 12px;
+#                     text-align: left;
+#                     background-color: #4CAF50;
+#                     color: white;
+#                 }}
+#             </style>
+#         </head>
+#         <body>
+#             <p>Dear Recipient,</p>
+#             <p>Find the attached consolidated report below:</p>
+#             {html_table}
+#             <p>Best regards,<br>Pharma Society Insights Team</p>
+#         </body>
+#         </html>
+#         """
+#         status = send_email(smtp_server, smtp_port, sender_email, sender_password, receiver_email, email_subject, email_body)
+#         # Display success or error message
+#         if "successfully" in status:
+#             st.success("Successfully sent data to Google Sheets!")
+#         else:
+#             st.error("Error while sending data to Google Sheets!")
 
 # Chatbot 2.0 Section with Enhanced Styling and Animations
 st.markdown('<div class="main-header">🤖 Chatbot 2.0 - Fine-Tuned on Report Data</div>', unsafe_allow_html=True)
