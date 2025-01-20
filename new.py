@@ -369,7 +369,7 @@ def dataframe_to_html(df):
     return df.to_html(index=False, border=1, classes="dataframe", justify="center")
 
 # Collect email details from user input
-receiver_email = "chouran1@gene.com"
+receiver_email = "kushagra.sharma1@incedoinc.com"
 email_subject = "Consolidated Pharma Society Report"
 
 # Set Gmail SMTP server settings
