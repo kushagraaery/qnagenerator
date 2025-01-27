@@ -59,12 +59,25 @@ st.write("🔬 This Q&A generator allows users to fetch answers to predefined qu
 
 # Define all available society options
 all_societies = [
-    "FLASCO (Florida Society of Clinical Oncology)", "GASCO (Georgia Society of Clinical Oncology)", "IOS (Indiana Oncology Society)", "IOWA Oncology Society", "MOASC (Medical Oncology Association of Southern California)"
+    "FLASCO (Florida Society of Clinical Oncology)", 
+    "GASCO (Georgia Society of Clinical Oncology)",
+    "PSOH (Pennsylvania Society of Oncology and Hematology)",
+    "WVOS (West Virginia Oncology Society)",
+    "DSCO (Delaware Society of Clinical Oncology)"
+    "OSNJ (Oncology Society of New Jersey)",
+    "ESHOS (Empire State Hematology Oncology Society)"
 ]
 
 # Define all available society options
 new_societies = [
-    "", "FLASCO (Florida Society of Clinical Oncology)", "GASCO (Georgia Society of Clinical Oncology)", "IOS (Indiana Oncology Society)", "IOWA Oncology Society", "MOASC (Medical Oncology Association of Southern California)"
+    "",
+    "FLASCO (Florida Society of Clinical Oncology)", 
+    "GASCO (Georgia Society of Clinical Oncology)",
+    "PSOH (Pennsylvania Society of Oncology and Hematology)",
+    "WVOS (West Virginia Oncology Society)",
+    "DSCO (Delaware Society of Clinical Oncology)"
+    "OSNJ (Oncology Society of New Jersey)",
+    "ESHOS (Empire State Hematology Oncology Society)"
 ]
 
 # Define questions
