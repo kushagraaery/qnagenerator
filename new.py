@@ -15,7 +15,6 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
 import plotly.express as px
 import streamlit.components.v1 as com
-import pyttsx3
 
 # Load environment variables
 load_dotenv()
