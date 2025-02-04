@@ -9,4 +9,3 @@ schedule
 APScheduler
 plotly
 pyttsx3
-pypiwin32
