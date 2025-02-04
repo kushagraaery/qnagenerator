@@ -745,3 +745,21 @@ def start_scheduler():
 # Start the scheduler in a separate thread
 if __name__ == "__main__":
     threading.Thread(target=start_scheduler, daemon=True).start()
+
+# JavaScript to trigger text-to-speech in the browser
+js_code = """
+<script>
+    function speak(text) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = "en-US";
+        speechSynthesis.speak(utterance);
+    }
+
+    window.onload = function() {
+        speak("Hi, I am your virtual chatbot. How can I help you? This chatbot uses OpenAI and the consolidated report data to answer your queries.");
+    };
+</script>
+"""
+
+# Display JavaScript in Streamlit using components.html
+st.components.v1.html(js_code, height=0)
