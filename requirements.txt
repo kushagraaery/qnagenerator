@@ -8,3 +8,5 @@ requests
 schedule
 APScheduler
 plotly
+pyttsx3
+pypiwin32  # (Windows-specific, required for pyttsx3 to work on Windows)
