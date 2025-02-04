@@ -745,15 +745,3 @@ def start_scheduler():
 # Start the scheduler in a separate thread
 if __name__ == "__main__":
     threading.Thread(target=start_scheduler, daemon=True).start()
-
-def text_to_speech(text):
-    engine = pyttsx3.init()
-    engine.say(text)
-    engine.runAndWait()
-
-if "greeted" not in st.session_state:
-    st.session_state.greeted = False
-
-if not st.session_state.greeted:
-    text_to_speech("Hi I am your virtual chatbot, how can I help you? This chatbot uses OpenAI and the consolidated report data to answer your queries.")
-    st.session_state.greeted = True
