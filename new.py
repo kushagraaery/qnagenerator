@@ -14,6 +14,7 @@ import threading
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
 import plotly.express as px
+import streamlit.components.v1 as com
 
 # Load environment variables
 load_dotenv()
@@ -482,6 +483,8 @@ if st.button("Send selected Society data to Google Sheets"):
 #             st.success("Successfully sent data to Google Sheets!")
 #         else:
 #             st.error("Error while sending data to Google Sheets!")
+
+com.iframe("https://lottie.host/embed/cab54264-ba4f-4663-8415-9992125e6d0a/dQgwO9lDGf.lottie")
 
 # Chatbot 2.0 Section with Enhanced Styling and Animations
 st.markdown('<div class="main-header">🤖 Chatbot 2.0 - Fine-Tuned on Report Data</div>', unsafe_allow_html=True)
