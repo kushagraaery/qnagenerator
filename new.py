@@ -487,14 +487,6 @@ if st.button("Send selected Society data to Google Sheets"):
 
 com.iframe("https://lottie.host/embed/cab54264-ba4f-4663-8415-9992125e6d0a/dQgwO9lDGf.lottie")
 
-def text_to_speech(text):
-    engine = pyttsx3.init()
-    engine.say(text)
-    engine.runAndWait()
-
-if st.button("About Me"):  # Button to trigger speech
-    text_to_speech("Hi I am your virtual chatbot, how can I help you? This chatbot uses OpenAI and the consolidated report data to answer your queries.")
-
 # Chatbot 2.0 Section with Enhanced Styling and Animations
 st.markdown('<div class="main-header">🤖 Chatbot 2.0 - Fine-Tuned on Report Data</div>', unsafe_allow_html=True)
 st.markdown("📋 This chatbot uses OpenAI and the **consolidated report** data to answer your queries.")
@@ -754,20 +746,10 @@ def start_scheduler():
 if __name__ == "__main__":
     threading.Thread(target=start_scheduler, daemon=True).start()
 
-# JavaScript to trigger text-to-speech in the browser
-js_code = """
-<script>
-    function speak(text) {
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = "en-US";
-        speechSynthesis.speak(utterance);
-    }
+def text_to_speech(text):
+    engine = pyttsx3.init()
+    engine.say(text)
+    engine.runAndWait()
 
-    window.onload = function() {
-        speak("Hi, I am your virtual chatbot. How can I help you? This chatbot uses OpenAI and the consolidated report data to answer your queries.");
-    };
-</script>
-"""
-
-# Display JavaScript in Streamlit using components.html
-st.components.v1.html(js_code, height=0)
+if st.button("About Me"):  # Button to trigger speech
+    text_to_speech("Hi I am your virtual chatbot, how can I help you? This chatbot uses OpenAI and the consolidated report data to answer your queries.")
