@@ -15,6 +15,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
 import plotly.express as px
 import streamlit.components.v1 as com
+import pyttsx3
 
 # Load environment variables
 load_dotenv()
@@ -485,6 +486,14 @@ if st.button("Send selected Society data to Google Sheets"):
 #             st.error("Error while sending data to Google Sheets!")
 
 com.iframe("https://lottie.host/embed/cab54264-ba4f-4663-8415-9992125e6d0a/dQgwO9lDGf.lottie")
+
+def text_to_speech(text):
+    engine = pyttsx3.init()
+    engine.say(text)
+    engine.runAndWait()
+
+if st.button("About Me"):  # Button to trigger speech
+    text_to_speech("Hi I am your virtual chatbot, how can I help you? This chatbot uses OpenAI and the consolidated report data to answer your queries.")
 
 # Chatbot 2.0 Section with Enhanced Styling and Animations
 st.markdown('<div class="main-header">🤖 Chatbot 2.0 - Fine-Tuned on Report Data</div>', unsafe_allow_html=True)
