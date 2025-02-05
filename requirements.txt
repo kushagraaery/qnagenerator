@@ -8,3 +8,4 @@ requests
 schedule
 APScheduler
 plotly
+pyttsx3
