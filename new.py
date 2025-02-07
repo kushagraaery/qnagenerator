@@ -282,23 +282,35 @@ def convert_df_to_excel(df):
     processed_data = output.getvalue()
     return processed_data
 
-# Button to fetch the existing Excel file
-if st.button("View Data"):
-    df, sha = fetch_excel_from_github()
-    if df is not None:
-        aliased_df = alias_columns(df)
-        st.success("Data fetched successfully!")
-        st.write("Current data with aliased columns:")
-        st.dataframe(aliased_df)
+# # Button to fetch the existing Excel file
+# if st.button("View Data"):
+#     df, sha = fetch_excel_from_github()
+#     if df is not None:
+#         aliased_df = alias_columns(df)
+#         st.success("Data fetched successfully!")
+#         st.write("Current data with aliased columns:")
+#         st.dataframe(aliased_df)
 
-        # Add download button for the Excel file
-        excel_data = convert_df_to_excel(aliased_df)
-        st.download_button(
-            label="Download as Excel",
-            data=excel_data,
-            file_name="data.xlsx",
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        )
+#         # Add download button for the Excel file
+#         excel_data = convert_df_to_excel(aliased_df)
+#         st.download_button(
+#             label="Download as Excel",
+#             data=excel_data,
+#             file_name="data.xlsx",
+#             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+#         )
+
+df, sha = fetch_excel_from_github()
+if df is not None:
+    aliased_df = alias_columns(df)
+    # Add download button for the Excel file
+    excel_data = convert_df_to_excel(aliased_df)
+    st.download_button(
+        label="Download All Data as Excel",
+        data=excel_data,
+        file_name="data.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
 
 # # Function to create and display a chart
 # def create_chart(df):
