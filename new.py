@@ -306,7 +306,7 @@ if df is not None:
     # Add download button for the Excel file
     excel_data = convert_df_to_excel(aliased_df)
     st.download_button(
-        label="Download All Data as Excel",
+        label="Download data as Excel",
         data=excel_data,
         file_name="data.xlsx",
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
